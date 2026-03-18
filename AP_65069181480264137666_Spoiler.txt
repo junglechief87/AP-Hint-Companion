@@ -1,0 +1,613 @@
+﻿Archipelago Version 0.6.4  -  Seed: 88984599283633891074
+
+Filling Algorithm:               balanced
+Players:                         1
+Plando Options:                  items
+Game:                            Sonic Adventure 2 Battle
+Location Count:                  263
+Progression Balancing:           0
+Accessibility:                   Full
+Local Items:                     
+Non-local Items:                 
+Start Inventory:                 
+Start Hints:                     Blue Chaos Emerald, Cyan Chaos Emerald, Green Chaos Emerald, Purple Chaos Emerald, Red Chaos Emerald, White Chaos Emerald, Yellow Chaos Emerald
+Start Location Hints:            
+Excluded Locations:              
+Priority Locations:              
+Item Links:                      
+Plando Items:                    
+Goal:                            Finalhazard Chaos Emerald Hunt
+Boss Rush Shuffle:               Shuffled
+Minigame Madness Trap Requirement:1
+Minigame Madness Trap Minimum:   1
+Boss Shuffle:                    Plando
+Logic Difficulty:                Standard
+Required Rank:                   E
+Max Emblem Cap:                  180
+Ring Loss:                       classic
+Mission Shuffle:                 Yes
+Required Cannon's Core Missions: First
+Emblem Percentage for Cannon's Core:50
+Number of Level Gates:           5
+Level Gate Distribution:         Even
+Level Gate Costs:                Medium
+Keysanity:                       Yes
+Whistlesanity:                   None
+Beetlesanity:                    Yes
+Omosanity:                       No
+Animalsanity:                    No
+Itemboxsanity:                   None
+Bigsanity:                       No
+Kart Race Checks:                None
+Black Market Slots:              9
+Black Market Unlock Costs:       Low
+Black Market Price Multiplier:   1
+Chao Race Difficulty:            None
+Chao Karate Difficulty:          None
+Chao Stadium Checks:             All
+Chao Animal Parts:               No
+Chao Stats:                      20
+Chao Stats Frequency:            5
+Chao Stats - Stamina:            No
+Chao Stats - Luck and Intelligence:No
+Chao Kindergarten Checks:        None
+Shuffle Starting Chao Eggs:      Yes
+Chao Entrance Randomization:     No
+Junk Fill Percentage:            50
+Trap Fill Percentage:            0
+OmoTrap Weight:                  Medium
+Chaos Control Trap Weight:       Medium
+Confusion Trap Weight:           Medium
+Tiny Trap Weight:                Medium
+Gravity Trap Weight:             Medium
+Exposition Trap Weight:          Medium
+Ice Trap Weight:                 Medium
+Slow Trap Weight:                Medium
+Cutscene Trap Weight:            Medium
+Reverse Trap Weight:             Medium
+Literature Trap Weight:          Medium
+Controller Drift Trap Weight:    Medium
+Poison Trap Weight:              Medium
+Bee Trap Weight:                 Medium
+Pong Trap Weight:                Medium
+Breakout Trap Weight:            Medium
+Fishing Trap Weight:             Medium
+Trivia Trap Weight:              Medium
+Pokemon Trivia Trap Weight:      Medium
+Pokemon Count Trap Weight:       Medium
+Number Sequence Trap Weight:     Medium
+Light Up Path Trap Weight:       Medium
+Pinball Trap Weight:             Medium
+Math Quiz Trap Weight:           Medium
+Snake Trap Weight:               Medium
+Input Sequence Trap Weight:      Medium
+Minigame Trap Difficulty:        Medium
+Big Fishing Difficulty:          Medium
+SADX Music:                      SA2B
+Music Shuffle Type:              None
+Voice Shuffle Type:              None
+Narrator:                        Default
+Sonic Mission Count:             3
+Sonic Mission 2:                 Yes
+Sonic Mission 3:                 Yes
+Sonic Mission 4:                 Yes
+Sonic Mission 5:                 Yes
+Shadow Mission Count:            3
+Shadow Mission 2:                Yes
+Shadow Mission 3:                Yes
+Shadow Mission 4:                Yes
+Shadow Mission 5:                Yes
+Tails Mission Count:             3
+Tails Mission 2:                 Yes
+Tails Mission 3:                 Yes
+Tails Mission 4:                 Yes
+Tails Mission 5:                 Yes
+Eggman Mission Count:            3
+Eggman Mission 2:                Yes
+Eggman Mission 3:                Yes
+Eggman Mission 4:                Yes
+Eggman Mission 5:                Yes
+Knuckles Mission Count:          3
+Knuckles Mission 2:              Yes
+Knuckles Mission 3:              Yes
+Knuckles Mission 4:              Yes
+Knuckles Mission 5:              Yes
+Rouge Mission Count:             3
+Rouge Mission 2:                 Yes
+Rouge Mission 3:                 Yes
+Rouge Mission 4:                 Yes
+Rouge Mission 5:                 Yes
+Kart Mission Count:              2
+Kart Mission 2:                  Yes
+Kart Mission 3:                  Yes
+Kart Mission 4:                  Yes
+Kart Mission 5:                  Yes
+Cannon's Core Mission Count:     2
+Cannon's Core Mission 2:         Yes
+Cannon's Core Mission 3:         Yes
+Cannon's Core Mission 4:         Yes
+Cannon's Core Mission 5:         Yes
+Ring Link:                       No
+Trap Link:                       No
+Death Link:                      No
+
+SA2 Mission Orders for JungleChief:
+Gate 0:
+Wild Canyon - 1 4 2 
+Aquatic Mine - 2 5 1 
+Crazy Gadget - 4 1 3 
+Final Rush - 3 2 5 
+Iron Gate - 4 1 5 
+
+Gate 1:
+Metal Harbor - 2 1 5 
+Green Forest - 1 2 5 
+Mission Street - 3 1 5 
+Meteor Herd - 2 4 5 
+Sky Rail - 4 5 2 
+
+Gate 2:
+Eternal Engine - 3 1 2 
+Sand Ocean - 4 5 3 
+Egg Quarters - 3 1 2 
+Weapons Bed - 3 1 2 
+White Jungle - 2 3 4 
+
+Gate 3:
+Hidden Base - 4 1 2 
+Pyramid Cave - 4 5 3 
+Dry Lagoon - 2 1 3 
+Route 280 - 1 2 
+Cosmic Wall - 4 3 1 
+
+Gate 4:
+Prison Lane - 2 5 1 
+Death Chamber - 3 2 5 
+Lost Colony - 1 5 2 
+Mad Space - 1 2 4 
+Final Chase - 2 3 1 
+
+Gate 5:
+City Escape - 4 1 5 
+Pumpkin Hill - 1 3 4 
+Route 101 - 3 1 
+Radical Highway - 3 1 2 
+Security Hall - 2 1 4 
+
+Cannon's Core - 2 1 
+
+
+SA2 Bosses for JungleChief:
+Gate 1 Boss: Tails vs Eggman 1
+Gate 2 Boss: Egg Golem (Sonic)
+Gate 3 Boss: Sonic vs Shadow 1
+Gate 4 Boss: Egg Golem (Eggman)
+Gate 5 Boss: Tails vs Eggman 2
+
+
+
+Locations:
+
+Gate 1 Boss: Emblem
+Gate 2 Boss: Emblem
+Gate 3 Boss: Emblem
+Gate 4 Boss: Emblem
+Gate 5 Boss: Red Chaos Drive
+City Escape - 1: Shield
+City Escape - 4: Emblem
+City Escape - 5: Twenty Rings
+City Escape - Chao Key 1: Emblem
+City Escape - Chao Key 2: Yellow Chaos Drive
+City Escape - Chao Key 3: Green Chaos Drive
+City Escape - Gold Beetle: Five Rings
+City Escape - Upgrade: Emblem
+Metal Harbor - 1: Chao Coin
+Metal Harbor - 2: Emblem
+Metal Harbor - 5: Green Chaos Drive
+Metal Harbor - Chao Key 1: Red Chaos Drive
+Metal Harbor - Chao Key 2: Emblem
+Metal Harbor - Chao Key 3: Emblem
+Metal Harbor - Gold Beetle: Blue Chaos Emerald
+Metal Harbor - Upgrade: Emblem
+Green Forest - 1: Emblem
+Green Forest - 2: Emblem
+Green Forest - 5: Emblem
+Green Forest - Chao Key 1: Emblem
+Green Forest - Chao Key 2: Red Chaos Drive
+Green Forest - Chao Key 3: Yellow Chaos Drive
+Green Forest - Gold Beetle: Emblem
+Green Forest - Upgrade: Emblem
+Pyramid Cave - 3: Purple Chaos Drive
+Pyramid Cave - 4: Emblem
+Pyramid Cave - 5: Emblem
+Pyramid Cave - Chao Key 1: Extra Life
+Pyramid Cave - Chao Key 2: Knuckles - Shovel Claws
+Pyramid Cave - Chao Key 3: Five Rings
+Pyramid Cave - Gold Beetle: Emblem
+Pyramid Cave - Upgrade: Emblem
+Crazy Gadget - 1: Normal Egg
+Crazy Gadget - 3: Emblem
+Crazy Gadget - 4: Extra Life
+Crazy Gadget - Chao Key 1: Emblem
+Crazy Gadget - Chao Key 2: Emblem
+Crazy Gadget - Chao Key 3: Knuckles - Sunglasses
+Crazy Gadget - Gold Beetle: Emblem
+Crazy Gadget - Upgrade: Emblem
+Final Rush - 2: Emblem
+Final Rush - 3: Red Chaos Drive
+Final Rush - 5: Purple Chaos Emerald
+Final Rush - Chao Key 1: Emblem
+Final Rush - Chao Key 2: Emblem
+Final Rush - Chao Key 3: Ten Rings
+Final Rush - Gold Beetle: Chao Coin
+Final Rush - Upgrade: Emblem
+Prison Lane - 1: Emblem
+Prison Lane - 2: Rouge - Iron Boots
+Prison Lane - 5: Shadow - Flame Ring
+Prison Lane - Chao Key 1: Shield
+Prison Lane - Chao Key 2: Extra Life
+Prison Lane - Chao Key 3: Emblem
+Prison Lane - Gold Beetle: Emblem
+Prison Lane - Upgrade: Emblem
+Mission Street - 1: Shadow - Ancient Light
+Mission Street - 3: Emblem
+Mission Street - 5: Red Fruit
+Mission Street - Chao Key 1: Emblem
+Mission Street - Chao Key 2: Emblem
+Mission Street - Chao Key 3: Emblem
+Mission Street - Gold Beetle: Emblem
+Mission Street - Upgrade: Invincibility
+Route 101 - 1: Knuckles - Air Necklace
+Route 101 - 3: Chao Coin
+Hidden Base - 1: Emblem
+Hidden Base - 2: Emblem
+Hidden Base - 4: Five Rings
+Hidden Base - Chao Key 1: Emblem
+Hidden Base - Chao Key 2: Emblem
+Hidden Base - Gold Beetle: Emblem
+Hidden Base - Upgrade: Emblem
+Eternal Engine - 1: Yellow Chaos Drive
+Eternal Engine - 2: Sonic - Magic Gloves
+Eternal Engine - 3: Emblem
+Eternal Engine - Chao Key 1: Emblem
+Eternal Engine - Chao Key 2: Emblem
+Eternal Engine - Chao Key 3: Round Fruit
+Eternal Engine - Gold Beetle: Invincibility
+Eternal Engine - Upgrade: Magnetic Shield
+Wild Canyon - 1: Emblem
+Wild Canyon - 2: Emblem
+Wild Canyon - 4: Magnetic Shield
+Wild Canyon - Chao Key 1: Emblem
+Wild Canyon - Chao Key 2: Emblem
+Wild Canyon - Chao Key 3: Emblem
+Wild Canyon - Gold Beetle: Shield
+Wild Canyon - Upgrade: Green Chaos Emerald
+Pumpkin Hill - 1: Cyan Chaos Emerald
+Pumpkin Hill - 3: Ten Rings
+Pumpkin Hill - 4: Emblem
+Pumpkin Hill - Chao Key 1: Eggman - Laser Blaster
+Pumpkin Hill - Chao Key 2: Emblem
+Pumpkin Hill - Chao Key 3: Invincibility
+Pumpkin Hill - Upgrade: Emblem
+Aquatic Mine - 1: Invincibility
+Aquatic Mine - 2: Blue Two-Tone Egg
+Aquatic Mine - 5: Sonic - Mystic Melody
+Aquatic Mine - Chao Key 1: Five Rings
+Aquatic Mine - Chao Key 2: Emblem
+Aquatic Mine - Chao Key 3: Emblem
+Aquatic Mine - Gold Beetle: Emblem
+Aquatic Mine - Upgrade: Emblem
+Death Chamber - 2: Emblem
+Death Chamber - 3: Shield
+Death Chamber - 5: Tails - Laser Blaster
+Death Chamber - Chao Key 1: Magnetic Shield
+Death Chamber - Chao Key 2: Extra Life
+Death Chamber - Chao Key 3: Purple Chaos Drive
+Death Chamber - Gold Beetle: Red Chaos Drive
+Death Chamber - Upgrade: Purple Chaos Drive
+Meteor Herd - 2: Emblem
+Meteor Herd - 4: Emblem
+Meteor Herd - 5: Emblem
+Meteor Herd - Chao Key 1: Tails - Bazooka
+Meteor Herd - Chao Key 2: Emblem
+Meteor Herd - Chao Key 3: Emblem
+Meteor Herd - Gold Beetle: Shadow - Air Shoes
+Meteor Herd - Upgrade: Shadow - Mystic Melody
+Radical Highway - 1: Invincibility
+Radical Highway - 2: Emblem
+Radical Highway - 3: Emblem
+Radical Highway - Chao Key 1: Emblem
+Radical Highway - Chao Key 2: Extra Life
+Radical Highway - Chao Key 3: Square Seed
+Radical Highway - Gold Beetle: Sonic - Flame Ring
+Radical Highway - Upgrade: Tails - Mystic Melody
+White Jungle - 2: Red Chaos Drive
+White Jungle - 3: Shield
+White Jungle - 4: Empty Can
+White Jungle - Chao Key 1: Emblem
+White Jungle - Chao Key 2: Emblem
+White Jungle - Chao Key 3: Emblem
+White Jungle - Gold Beetle: Chao Coin
+White Jungle - Upgrade: Five Rings
+Sky Rail - 2: Emblem
+Sky Rail - 4: Emblem
+Sky Rail - 5: Tasty Fruit
+Sky Rail - Chao Key 1: Red Chaos Emerald
+Sky Rail - Chao Key 2: Emblem
+Sky Rail - Chao Key 3: Emblem
+Sky Rail - Gold Beetle: Purple Fruit
+Sky Rail - Upgrade: Chao Coin
+Final Chase - 1: Green Fruit
+Final Chase - 2: Shield
+Final Chase - 3: Emblem
+Final Chase - Chao Key 1: Emblem
+Final Chase - Chao Key 2: Emblem
+Final Chase - Chao Key 3: Emblem
+Final Chase - Gold Beetle: Sonic - Bounce Bracelet
+Final Chase - Upgrade: Yellow Chaos Drive
+Iron Gate - 1: Eggman - Jet Engine
+Iron Gate - 4: Emblem
+Iron Gate - 5: Rouge - Mystic Melody
+Iron Gate - Chao Key 1: Emblem
+Iron Gate - Chao Key 2: Emblem
+Iron Gate - Chao Key 3: Green Chaos Drive
+Iron Gate - Gold Beetle: Emblem
+Iron Gate - Upgrade: Emblem
+Sand Ocean - 3: Emblem
+Sand Ocean - 4: Emblem
+Sand Ocean - 5: Emblem
+Sand Ocean - Chao Key 1: Emblem
+Sand Ocean - Chao Key 2: Emblem
+Sand Ocean - Chao Key 3: Emblem
+Sand Ocean - Gold Beetle: Emblem
+Sand Ocean - Upgrade: Emblem
+Lost Colony - 1: Emblem
+Lost Colony - 2: Green Two-Tone Egg
+Lost Colony - 5: Emblem
+Lost Colony - Chao Key 1: Magnetic Shield
+Lost Colony - Chao Key 2: Eggman - Large Cannon
+Lost Colony - Chao Key 3: Rouge - Pick Nails
+Lost Colony - Gold Beetle: Emblem
+Lost Colony - Upgrade: Emblem
+Weapons Bed - 1: Chao Coin
+Weapons Bed - 2: Emblem
+Weapons Bed - 3: Emblem
+Weapons Bed - Chao Key 1: Yellow Chaos Drive
+Weapons Bed - Chao Key 2: Tasty Seed
+Weapons Bed - Chao Key 3: Emblem
+Weapons Bed - Upgrade: Emblem
+Cosmic Wall - 1: Sky Blue Shiny Egg
+Cosmic Wall - 3: Red Chaos Drive
+Cosmic Wall - 4: Emblem
+Cosmic Wall - Chao Key 1: Emblem
+Cosmic Wall - Chao Key 2: Emblem
+Cosmic Wall - Chao Key 3: Emblem
+Cosmic Wall - Gold Beetle: Emblem
+Cosmic Wall - Upgrade: Sky Blue Shiny Egg
+Dry Lagoon - 1: Emblem
+Dry Lagoon - 2: Emblem
+Dry Lagoon - 3: Twenty Rings
+Dry Lagoon - Chao Key 1: Emblem
+Dry Lagoon - Chao Key 2: Eggman - Mystic Melody
+Dry Lagoon - Chao Key 3: Emblem
+Dry Lagoon - Gold Beetle: Yellow Chaos Emerald
+Dry Lagoon - Upgrade: Eggman - Protective Armor
+Egg Quarters - 1: Five Rings
+Egg Quarters - 2: Emblem
+Egg Quarters - 3: Emblem
+Egg Quarters - Chao Key 1: Emblem
+Egg Quarters - Chao Key 2: Emblem
+Egg Quarters - Chao Key 3: Emblem
+Egg Quarters - Gold Beetle: Emblem
+Egg Quarters - Upgrade: Chao Coin
+Security Hall - 1: Emblem
+Security Hall - 2: Emblem
+Security Hall - 4: Five Rings
+Security Hall - Chao Key 1: Extra Life
+Security Hall - Chao Key 2: Emblem
+Security Hall - Chao Key 3: Emblem
+Security Hall - Gold Beetle: Shield
+Security Hall - Upgrade: Ten Rings
+Route 280 - 1: Emblem
+Route 280 - 2: Hero Seed
+Mad Space - 1: Sonic - Light Shoes
+Mad Space - 2: White Chaos Emerald
+Mad Space - 4: Shield
+Mad Space - Chao Key 1: Emblem
+Mad Space - Chao Key 2: Emblem
+Mad Space - Chao Key 3: Emblem
+Mad Space - Gold Beetle: Emblem
+Mad Space - Upgrade: Extra Life
+Cannon's Core - 1: Emblem
+Cannon's Core - 2: Emblem
+Cannon's Core - Chao Key 1: Emblem
+Cannon's Core - Chao Key 2: Emblem
+Cannon's Core - Chao Key 3: Emblem
+Cannon's Core - Gold Beetle: Emblem
+Black Market - 1: Emblem
+Black Market - 2: Emblem
+Black Market - 3: Emblem
+Black Market - 4: Green Shiny Egg
+Black Market - 5: Emblem
+Black Market - 6: Invincibility
+Black Market - 7: Chao Coin
+Black Market - 8: Emblem
+Black Market - 9: Rouge - Treasure Scope
+Finalhazard: What Maria Wanted
+Green Hill - 1: Knuckles - Hammer Gloves
+Green Hill - Chao Key 1: Extra Life
+Chao Stat - Swim - 5: Emblem
+Chao Stat - Fly - 5: Emblem
+Chao Stat - Run - 5: Emblem
+Chao Stat - Power - 5: Shield
+Chao Stat - Swim - 10: Tails - Booster
+Chao Stat - Fly - 10: Emblem
+Chao Stat - Run - 10: Emblem
+Chao Stat - Power - 10: Emblem
+Chao Stat - Swim - 15: Emblem
+Chao Stat - Fly - 15: Emblem
+Chao Stat - Run - 15: Dark Seed
+Chao Stat - Power - 15: Emblem
+Chao Stat - Swim - 20: Knuckles - Mystic Melody
+Chao Stat - Fly - 20: Five Rings
+Chao Stat - Run - 20: Chao Coin
+Chao Stat - Power - 20: Sonic - Ancient Light
+
+Playthrough:
+
+0: {
+
+}
+1: {
+  Aquatic Mine - Chao Key 2: Emblem
+  Aquatic Mine - Chao Key 3: Emblem
+  Aquatic Mine - Gold Beetle: Emblem
+  Aquatic Mine - Upgrade: Emblem
+  Black Market - 1: Emblem
+  Final Rush - Gold Beetle: Chao Coin
+  Iron Gate - 1: Eggman - Jet Engine
+  Iron Gate - 4: Emblem
+  Iron Gate - Chao Key 2: Emblem
+  Wild Canyon - 1: Emblem
+  Wild Canyon - 2: Emblem
+  Wild Canyon - Chao Key 2: Emblem
+  Wild Canyon - Chao Key 3: Emblem
+}
+2: {
+  Black Market - 2: Emblem
+  Black Market - 3: Emblem
+  Chao Stat - Fly - 5: Emblem
+  Chao Stat - Run - 5: Emblem
+  Chao Stat - Swim - 5: Emblem
+  Gate 1 Boss: Emblem
+  Green Forest - 1: Emblem
+  Green Forest - 2: Emblem
+  Green Forest - Gold Beetle: Emblem
+  Green Forest - Upgrade: Emblem
+  Metal Harbor - Gold Beetle: Blue Chaos Emerald
+  Metal Harbor - Upgrade: Emblem
+  Meteor Herd - 2: Emblem
+  Meteor Herd - Chao Key 1: Tails - Bazooka
+  Meteor Herd - Chao Key 2: Emblem
+  Meteor Herd - Chao Key 3: Emblem
+  Meteor Herd - Gold Beetle: Shadow - Air Shoes
+  Sky Rail - 2: Emblem
+  Sky Rail - 4: Emblem
+  Sky Rail - Chao Key 1: Red Chaos Emerald
+  Sky Rail - Chao Key 2: Emblem
+  Sky Rail - Chao Key 3: Emblem
+  Sky Rail - Upgrade: Chao Coin
+}
+3: {
+  Black Market - 5: Emblem
+  Chao Stat - Fly - 10: Emblem
+  Chao Stat - Power - 10: Emblem
+  Chao Stat - Run - 10: Emblem
+  Chao Stat - Swim - 10: Tails - Booster
+  Egg Quarters - Chao Key 1: Emblem
+  Egg Quarters - Chao Key 2: Emblem
+  Egg Quarters - Gold Beetle: Emblem
+  Egg Quarters - Upgrade: Chao Coin
+  Gate 2 Boss: Emblem
+  Sand Ocean - 4: Emblem
+  Sand Ocean - 5: Emblem
+  Sand Ocean - Chao Key 1: Emblem
+  Sand Ocean - Chao Key 2: Emblem
+  Sand Ocean - Chao Key 3: Emblem
+  Sand Ocean - Upgrade: Emblem
+  Weapons Bed - Upgrade: Emblem
+  White Jungle - Chao Key 1: Emblem
+  White Jungle - Chao Key 2: Emblem
+  White Jungle - Chao Key 3: Emblem
+  White Jungle - Gold Beetle: Chao Coin
+}
+4: {
+  Black Market - 8: Emblem
+  Cosmic Wall - 4: Emblem
+  Cosmic Wall - Chao Key 1: Emblem
+  Cosmic Wall - Chao Key 3: Emblem
+  Dry Lagoon - 1: Emblem
+  Dry Lagoon - 2: Emblem
+  Dry Lagoon - Chao Key 1: Emblem
+  Dry Lagoon - Chao Key 2: Eggman - Mystic Melody
+  Dry Lagoon - Chao Key 3: Emblem
+  Eternal Engine - Chao Key 2: Emblem
+  Gate 3 Boss: Emblem
+  Hidden Base - 1: Emblem
+  Hidden Base - 2: Emblem
+  Hidden Base - Chao Key 1: Emblem
+  Hidden Base - Chao Key 2: Emblem
+  Mission Street - Chao Key 1: Emblem
+  Mission Street - Chao Key 2: Emblem
+  Mission Street - Chao Key 3: Emblem
+  Mission Street - Gold Beetle: Emblem
+  Pyramid Cave - Upgrade: Emblem
+  Route 280 - 1: Emblem
+}
+5: {
+  Chao Stat - Fly - 15: Emblem
+  Chao Stat - Swim - 15: Emblem
+  Final Chase - Chao Key 2: Emblem
+  Final Chase - Chao Key 3: Emblem
+  Final Chase - Gold Beetle: Sonic - Bounce Bracelet
+  Gate 4 Boss: Emblem
+  Lost Colony - 1: Emblem
+  Lost Colony - Chao Key 2: Eggman - Large Cannon
+  Lost Colony - Chao Key 3: Rouge - Pick Nails
+  Lost Colony - Gold Beetle: Emblem
+  Lost Colony - Upgrade: Emblem
+  Mad Space - Chao Key 1: Emblem
+  Prison Lane - 1: Emblem
+  Prison Lane - 2: Rouge - Iron Boots
+  Prison Lane - Upgrade: Emblem
+}
+6: {
+  Crazy Gadget - Chao Key 1: Emblem
+  Crazy Gadget - Upgrade: Emblem
+  Final Rush - Upgrade: Emblem
+  Green Forest - 5: Emblem
+  Iron Gate - 5: Rouge - Mystic Melody
+  Iron Gate - Upgrade: Emblem
+  Lost Colony - 5: Emblem
+  Mad Space - 1: Sonic - Light Shoes
+  Mad Space - 2: White Chaos Emerald
+  Mad Space - Chao Key 2: Emblem
+  Mad Space - Chao Key 3: Emblem
+  Mad Space - Gold Beetle: Emblem
+  Pyramid Cave - 4: Emblem
+  Pyramid Cave - 5: Emblem
+  Pyramid Cave - Chao Key 2: Knuckles - Shovel Claws
+  Pyramid Cave - Gold Beetle: Emblem
+  Sand Ocean - 3: Emblem
+  Weapons Bed - 2: Emblem
+  Weapons Bed - 3: Emblem
+}
+7: {
+  Cannon's Core - 2: Emblem
+  Cannon's Core - Chao Key 1: Emblem
+  Dry Lagoon - Gold Beetle: Yellow Chaos Emerald
+  Egg Quarters - 2: Emblem
+  Egg Quarters - 3: Emblem
+  Metal Harbor - 2: Emblem
+  Metal Harbor - Chao Key 2: Emblem
+  Metal Harbor - Chao Key 3: Emblem
+  Wild Canyon - Upgrade: Green Chaos Emerald
+}
+8: {
+  Chao Stat - Swim - 20: Knuckles - Mystic Melody
+  Pumpkin Hill - 1: Cyan Chaos Emerald
+  Radical Highway - Gold Beetle: Sonic - Flame Ring
+  Route 101 - 1: Knuckles - Air Necklace
+}
+9: {
+  Crazy Gadget - Chao Key 3: Knuckles - Sunglasses
+}
+10: {
+  Aquatic Mine - 5: Sonic - Mystic Melody
+}
+11: {
+  Final Rush - 5: Purple Chaos Emerald
+}
+12: {
+  Finalhazard: What Maria Wanted
+}
