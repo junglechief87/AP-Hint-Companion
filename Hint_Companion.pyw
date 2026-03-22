@@ -39,43 +39,47 @@ class hintCompanionData:
         self.spoilerLocations = []
         self.trackerData = []
         self.playerData = []
+        self.chosenLocations = []
         self.port = 0
         self.portText = ""
         self.trackerIdText = ""
         self.roomIdText = ""
-        self.hint = ""
+        self.hintError= ""
         self.trackerId = ""
+        self.roomId = ""
+        self.spoilerFile = ""
 
     def connect(self):
         """Initialize connection and acquire room data, game lists, and datapackage for all games."""
 
         if self.port != "":
             userData = self.getSession(self.port)
-            if not userData["room_id"]:
-                self.processConnectionError("No session found")
-            elif userData["status"] != 200:
-                self.processConnectionError("Unable to connect")
-            roomId = userData["room_id"]
+            if not userData["room_id"]: self.processConnectionError("No session found")
+            elif userData["status"] != 200: self.processConnectionError("Unable to connect")
+            self.roomId = userData["room_id"]
             self.trackerId = userData["tracker"]
         elif self.trackerIdText and self.roomIdText:
-            roomId = self.roomIdText
+            self.roomId = self.roomIdText
             self.trackerId = self.trackerIdText
 
-        self.roomIdText, self.trackerIdText = roomId, self.trackerId
-        roomData = self.getData(ROOM_STATUS_API + roomId)
+        self.roomIdText, self.trackerIdText = self.roomId, self.trackerId
+        roomData = self.getData(ROOM_STATUS_API + self.roomId)
         self.playerData = roomData["data"]["players"]
 
         checksumList = self.getChecksums(STATIC_TRACKER_API + self.trackerId)
         self.allDatapackageData = [self.getData(DATAPACKAGE_API + checksum)["data"] for checksum in checksumList["data"]]
 
         self.preLoadJson()
+        self.updateSaveFile()
+        if self.chosenLocations["hintHistory"]:
+            app.hintFrame.updateHistory()
 
     def getSession(self, port):
         """Find user session by checking cookies from browsers and matching the port number."""
         cookiesJar = self.get_cookies([])
         for cookies in cookiesJar:
             response = requests.get(USER_ENDPOINT_API, cookies=cookies)
-            if response.status_code == 200:
+            if response.status_code == 200: 
                 userRoomData = response.json()
                 for room in userRoomData:
                     if room["last_port"] == int(port):
@@ -108,8 +112,7 @@ class hintCompanionData:
     def getChecksums(self, url):
         """Retrieve checksums needed to acquire data packages for games."""
         response = requests.get(url)
-        if response.status_code != 200:
-            return {"data": [], "status": response.status_code}
+        if response.status_code != 200: return {"data": [], "status": response.status_code}
         data = response.json()
         return {"data": [data["datapackage"][player["game"]]["checksum"] for player in data["player_game"]], "status": response.status_code}
 
@@ -164,18 +167,14 @@ class hintCompanionData:
     def getData(self, url):
         """Fetch data from an API endpoint."""
         response = requests.get(url)
-        if response.status_code != 200:
-            self.processConnectionError("Failed to connect to endpoint:" + url)
-        try:
-            return {"data": response.json(), "status": response.status_code}
-        except json.JSONDecodeError:
-            self.processConnectionError("Invalid or empty JSON response")
+        if response.status_code != 200: self.processConnectionError("Failed to connect to endpoint:" + url)
+        try: return {"data": response.json(), "status": response.status_code}
+        except json.JSONDecodeError: self.processConnectionError("Invalid or empty JSON response")
 
     def updateTracker(self):
         """Update tracker data."""
         self.trackerData = self.getData(TRACKER_API + self.trackerId)
-        if self.trackerData["status"] != 200:
-            self.processConnectionError("Failed to get tracker data")
+        if self.trackerData["status"] != 200: self.processConnectionError("Failed to get tracker data")
         self.trackerData = self.trackerData["data"]
 
     def getRegionBasedHint(self):
@@ -184,23 +183,27 @@ class hintCompanionData:
         """
         firstNewLocationToEndOfSphereList = []
         newRegionHint = ""
-        playerLocation = ""  # Player and game who the check belongs to
         foundLocation = False
 
         self.updateTracker()
+        self.updateSaveFile()
 
         # Find the first unchecked location in the playthrough
         for line in self.playthrough:
             line = line.lstrip()
-            if line.startswith(END_OF_SPHERE_MARKER) and foundLocation:
-                break
+            if line.startswith(END_OF_SPHERE_MARKER) and foundLocation: break
             for location in self.getUnchecked():
                 if line.startswith(location["location"]):
                     for item in self.includedItems:
                         if line[len(location["location"]) - 1:].find(item) > -1:
-                            firstNewLocationToEndOfSphereList.append(location)
-                            foundLocation = True
+                            foundLocation = True #this is here so these hints always stay within the current sphere
+                            if location["location"] not in self.chosenLocations["nextRegionHints"]:
+                                firstNewLocationToEndOfSphereList.append(location)
 
+        if not firstNewLocationToEndOfSphereList:
+            self.hintError= "No new locations for hint in sphere."
+            return
+        
         # Randomly choose a location to avoid bias
         chosenLocation = random.choice(firstNewLocationToEndOfSphereList)
 
@@ -215,27 +218,54 @@ class hintCompanionData:
                         if chosenLocation["location"].startswith(alias):
                             newRegionHint = f"{chosenLocation["player"][0]}: {regionListKeys[0]}"
                             break
-                if newRegionHint:
-                    break
+                if newRegionHint: break
             except Exception:
                 regionAlias = region
                 if chosenLocation["location"].startswith(regionAlias):
                     newRegionHint = f"{chosenLocation["player"][0]}: {region}"
                     break
+        
+        self.updateSaveFile(location=chosenLocation["location"], hintType="nextRegionHints", hintText=f"Have you tried searching here?\n {newRegionHint}")
 
-        self.hint = f"Have you tried searching here?\n {newRegionHint}"
-
-    def getRandomItemHint(self):
+    def getrandomLocHint(self):
         self.updateTracker()
+        self.updateSaveFile()
         uncheckedLocations = self.getUnchecked()
         random.shuffle(uncheckedLocations)
         for uncheckedLocation in uncheckedLocations:
             for location in self.spoilerLocations:
                 if location.startswith(uncheckedLocation["location"]):
                     for item in self.includedItems:
-                        if location[len(uncheckedLocation["location"]) - 1:].find(item) > -1:
-                            self.hint = location
+                        if location[len(uncheckedLocation["location"]) - 1:].find(item) > -1 and uncheckedLocation["location"] not in self.chosenLocations["randomItemLoc"]:
+                            if len(self.playerData) > 1:
+                                formattedText = location[:location.find(END_OF_LOCATION_MARKER) + 2] + "\n" + location[location.find(END_OF_LOCATION_MARKER) + 2:]
+                            else:
+                                formattedText = location[:location.find(SOLO_END_OF_LOCATION_MARKER)] + "\n" + location[location.find(SOLO_END_OF_LOCATION_MARKER):]
+                            self.updateSaveFile(location=uncheckedLocation["location"], hintType="randomItemLoc", hintText=formattedText)
                             return
+        self.hintError= "No new locations for hint."
+
+    def updateSaveFile(self, **kwargs):
+        self.hintError= ""
+        location = kwargs.get("location", "")
+        hintType = kwargs.get("hintType", "")
+        hintText = kwargs.get("hintText", "")
+
+        with open(os.path.join(self.companionDirectory, "current_saved_seed.json"), "r") as savedData:
+            self.chosenLocations = json.load(savedData)
+            if self.chosenLocations["roomId"] != self.roomId:
+                self.chosenLocations["roomId"] = self.roomId
+                self.chosenLocations["nextRegionHints"] = []
+                self.chosenLocations["randomItemLoc"] = []
+                self.chosenLocations["hintHistory"] = []
+            if location:
+                self.chosenLocations[hintType].append(location)
+                self.chosenLocations["hintHistory"].append(hintText)
+                with open(os.path.join(self.companionDirectory, "current_saved_seed.json"), "w") as savedData:
+                    json.dump(self.chosenLocations, savedData)
+                return
+            else:
+                return
 
     def getUnchecked(self):
         allCheckLocations = []
@@ -266,39 +296,46 @@ class hintCompanionData:
 
         return uncheckedLocation
 
-    def buildPlaythrough(self, spoilerFile):
+    def getSpoilerData(self):
         """Extract playthrough data from the spoiler file."""
+        self.spoilerLocations = []
         self.playthrough = []
-        with open(spoilerFile, "r") as spoilerData:
+        with open(self.spoilerFile, "r") as spoilerData:
             spoiler = spoilerData.readlines()
 
-        locationsStart = next((i for i, line in enumerate(spoiler) if line.startswith("Locations:\n")), 0)
+        locationsStart = next((i for i, line in enumerate(spoiler) if line.startswith("Locations:\n")), len(spoiler))
         locationsEnd = next((i for i, line in enumerate(spoiler) if line.startswith("Playthrough:\n")), len(spoiler))
         self.spoilerLocations = spoiler[locationsStart + 2:locationsEnd - 1]
 
-        playthroughStart = next((i for i, line in enumerate(spoiler) if line.startswith("Playthrough:\n")), 0)
+        playthroughStart = next((i for i, line in enumerate(spoiler) if line.startswith("Playthrough:\n")), len(spoiler))
         playthroughEnd = next((i for i, line in enumerate(spoiler) if line.startswith("Paths:\n")), len(spoiler))
         self.playthrough = spoiler[playthroughStart + 1:playthroughEnd]
 
-        spoilerData.close()
+        if not self.spoilerLocations and not self.playthrough:
+            raise Exception("Not a valid AP Spoiler File")
 
     def processConnectionError(self, error):
         """Handle connection errors."""
         app.connectionFrame.statusFrame.statusLabel.configure(text=error)
         app.connectionFrame.statusFrame.configure(fg_color="dark red")
+        app.toggleFrames("connection","normal")
         raise Exception(error)
 
 """
 GUI Classes
 """
 class statusFrame(ctk.CTkFrame):
-            def __init__(self, master):
-                super().__init__(master)
-                self.grid_columnconfigure(0, weight=1)
+    """
+    displays connection status and errors
+    """
 
-                # Status Label
-                self.statusLabel = ctk.CTkLabel(self, text="Awaiting Connection", **FRAME_TITLE_STYLE)
-                self.statusLabel.grid(row=0, column=0, padx=5, pady=5)
+    def __init__(self, master):
+        super().__init__(master)
+        self.grid_columnconfigure(0, weight=1)
+
+        # Status Label
+        self.statusLabel = ctk.CTkLabel(self, text="Awaiting Connection", **FRAME_TITLE_STYLE)
+        self.statusLabel.grid(row=0, column=0, padx=5, pady=5)
 
 class connectionFrame(ctk.CTkFrame):
     """
@@ -310,7 +347,7 @@ class connectionFrame(ctk.CTkFrame):
         self.portVar = ctk.StringVar()
         self.roomIdVar = ctk.StringVar()
         self.trackerIdVar = ctk.StringVar()
-        self.grid_columnconfigure(0, weight=1)
+        self.grid_columnconfigure((0,1,2), weight=1)
                 
         # Port Number
         self.portLabel = ctk.CTkLabel(self, text="Port Number", **FRAME_TITLE_STYLE)
@@ -338,52 +375,43 @@ class connectionFrame(ctk.CTkFrame):
         self.trackerEntry.grid(row=2, column=1, padx=5, pady=5)
 
         # Connect Button
-        self.connectButton = ctk.CTkButton(self, text="Connect", command=lambda: self.processConnection(master))
+        self.connectButton = ctk.CTkButton(self, text="Connect", command=lambda: self.processConnection())
         self.connectButton.grid(row=0, column=2, padx=5, pady=5)
 
         self.statusFrame = statusFrame(self)
         self.statusFrame.grid(row=3, column=0, padx=5, pady=5, sticky="ew", columnspan=3)
         self.statusFrame.configure(fg_color="grey")
 
-    def processConnection(self,master):
-            """
-            Handle the connection process and update the UI accordingly.
-            """
-            self.master.data.port = self.portVar.get()
-            self.master.data.roomIdText = self.roomIdVar.get()
-            self.master.data.trackerIdText = self.trackerIdVar.get()
-            self.connectButton.configure(state="disabled")
-            self.master.hintFrame.getNextRegionHintBtn.configure(state="disabled")
-            self.master.hintFrame.playerSelectOptionsMenu.configure(state="disabled")
-            self.master.hintFrame.playerScopeToggleSW.configure(state="disabled")
-            self.master.gamePrepFrame.setupItemHintsBtn.configure(state="disabled")
-            self.master.hintFrame.getRandomItemHintBtn.configure(state="disabled")
-
-            self.statusFrame.statusLabel.configure(text="Connecting...")
-            self.statusFrame.configure(fg_color="black")
-            self.update()
+    def processConnection(self):
+        """
+        Handle the connection process and update the UI accordingly.
+        """
+        self.master.data.port = self.portVar.get()
+        self.master.data.roomIdText = self.roomIdVar.get()
+        self.master.data.trackerIdText = self.trackerIdVar.get()
+        self.statusFrame.statusLabel.configure(text="Connecting...")
+        self.statusFrame.configure(fg_color="black")
+        self.update()
+        self.update_idletasks()
+        self.master.toggleAllFrames("disabled")
+        try:
+            self.master.data.connect()
+            self.statusFrame.statusLabel.configure(text="Connected")
+            self.connectButton.configure(state="normal")
+            self.statusFrame.configure(fg_color="blue")
+            self.roomIdVar.set(self.master.data.roomIdText)
+            self.trackerIdVar.set(self.master.data.trackerIdText)
             self.update_idletasks()
-            try:
-                self.master.data.connect()
-                self.statusFrame.statusLabel.configure(text="Connected")
-                self.connectButton.configure(state="normal")
-                self.statusFrame.configure(fg_color="blue")
-                self.master.hintFrame.getNextRegionHintBtn.configure(state="normal")
-                self.master.gamePrepFrame.setupItemHintsBtn.configure(state="normal")
-                self.master.hintFrame.playerSelectOptionsMenu.configure(state="normal", values=[players[0] for players in self.master.data.playerData])
-                self.master.hintFrame.playerSelectOptionsMenu.set(self.master.data.playerData[0][0])
-                self.master.hintFrame.playerScopeToggleSW.configure(state="normal")
-                self.master.hintFrame.getRandomItemHintBtn.configure(state="normal")
-                self.roomIdVar.set(self.master.data.roomIdText)
-                self.trackerIdVar.set(self.master.data.trackerIdText)
-                self.update_idletasks()
-            except ValueError as e:
-                print(e)
-                self.connectButton.configure(state="normal")
-                self.master.data.processConnectionError("Invalid Port Number")
-            except Exception as e:
-                print(e)
-                self.connectButton.configure(state="normal")
+            self.master.toggleFrames("connection", "normal")
+            self.master.toggleFrames("prep", "normal")
+            if self.master.data.spoilerFile: 
+                self.master.toggleFrames("hint", "normal")
+        except ValueError as e:
+            self.master.toggleFrames("connection", "normal")
+            self.master.data.processConnectionError("Invalid Port Number" + str(e))
+        except Exception as e:
+            self.master.data.processConnectionError(str(e))
+            self.master.toggleFrames("connection", "normal")
 
 class gamePrepFrame(ctk.CTkFrame):
     """
@@ -391,33 +419,82 @@ class gamePrepFrame(ctk.CTkFrame):
     """
     def __init__(self, master):
         super().__init__(master)
+        self.grid_columnconfigure((0,1), weight=1)
 
+        # Open up file select for Spoiler Button
         self.spoilerSelectBtn = ctk.CTkButton(self, text="Select Spoiler File", command=lambda: self.selectSpoilerFile())
-        self.spoilerSelectBtn.grid(row=0, column=0, padx=5, pady=5)
+        self.spoilerSelectBtn.grid(row=0, column=0, padx=5, pady=5, sticky="ew")
 
+        # Open up modal window to setup which items are included in hints
         self.setupItemHintsBtn = ctk.CTkButton(self, text="Setup Item Hints", command=lambda: self.openIncludeItemGUI(), state="disabled")
-        self.setupItemHintsBtn.grid(row=0, column=1, padx=5, pady=5)
+        self.setupItemHintsBtn.grid(row=0, column=1, padx=5, pady=5, sticky="ew")
+        
+        # Display selected spoiler file
+        self.spoilerFilesLabel = ctk.CTkLabel(self, text="Spoiler File: ")
+        self.spoilerFilesLabel.grid(row=1, column=0, padx=5, pady=5, columnspan=2, sticky="w")
 
     def selectSpoilerFile(self):
-        spoilerFile = filedialog.askopenfilename()
-        self.master.data.buildPlaythrough(spoilerFile)
+        """
+        assign spoiler file and build out playthrough and locations.
+        """
+        self.master.data.spoilerFile = filedialog.askopenfilename()
+        try:
+            self.master.data.getSpoilerData()
+            if self.master.connectionFrame.statusFrame.statusLabel.cget("text") == "Connected":
+                self.master.toggleFrames("hint", "normal")
+            self.spoilerFilesLabel.configure(text="Spoiler File: " + 
+                                             self.master.data.spoilerFile[self.master.data.spoilerFile.rfind("/") + 1:])
+            self.spoilerFilesLabel.configure(fg_color="transparent")
+        except Exception as e:
+            self.spoilerFilesLabel.configure(text=str(e), fg_color="dark red")
 
     def openIncludeItemGUI(self):
+        """
+        uses the game data package data to generate lists of items that can be set per game for hints to reference. Data is stored in Include_Items.json.
+        """
         popup = ctk.CTkToplevel(self)
         popup.title("Include Items")
-        popup.geometry("500x500")
+        popup.geometry("500x575")
+        popup.maxsize(500*4,575*4)
+        popup.minsize(500,575)
+        #popup.resizable(width=False, height=False)
         popup.grab_set()  # Make popup modal
-        popup.columnconfigure(0, weight=1)
+        popup.columnconfigure((0,1), weight=1)
         
+        # Player Select Drop Down
         self.playerVar = ctk.StringVar(value=self.master.data.playerData[0][0]) 
         self.playerSelectOptionsMenu = ctk.CTkOptionMenu(popup, variable=self.playerVar, values=[players[0] for players in self.master.data.playerData], command=self.updatePlayerVar)
-        self.playerSelectOptionsMenu.grid(row=0, column=0, padx=5, pady=5)
+        self.playerSelectOptionsMenu.grid(row=0, column=0, padx=5, pady=5, sticky="ew")
+
+        # Game Player is Playing Label
         self.gameLabel = ctk.CTkLabel(popup, text="Game: " + self.master.data.playerData[0][1])
         self.gameLabel.grid(row=0, column=1, padx=5, pady=5)
 
+        # Search Box Label
+        self.filterLabel = ctk.CTkLabel(popup, text="Filter: ", **FRAME_TITLE_STYLE)
+        self.filterLabel.grid(row=1, column=0, padx=5, pady=5, sticky="e")
+
+        # Search Text
+        self.excludeItemFilterVar = ctk.StringVar()
+        self.excludeItemFilter = ctk.CTkEntry(popup, textvariable=self.excludeItemFilterVar, width=200)
+        self.excludeItemFilter.grid(row=1, column=1, padx=5, pady=5, sticky="ew")
+
+        # Filter button
+        self.filterButton = ctk.CTkButton(popup, text="Filter Exclude List", command=lambda: self.filterExcludeList())
+        self.filterButton.grid(row=2, column=0, padx=5, pady=5, columnspan=2, sticky="ew")
+
+        # Exclude List Label
+        self.filterLabel = ctk.CTkLabel(popup, text="Exclude Items List:")
+        self.filterLabel.grid(row=3, column=0, padx=5, sticky="w")
+
+        # Include List Label
+        self.filterLabel = ctk.CTkLabel(popup, text="Include Items List:")
+        self.filterLabel.grid(row=3, column=1, padx=5, sticky="w")
+
+        # Exclude Items List Box
         self.excludeListFrame = ttk.Frame(popup)
         self.playerExcludeItemList = tk.Variable(value=[])
-        self.excludeItemList = tk.Listbox(self.excludeListFrame, listvariable=self.playerExcludeItemList, selectmode=tk.MULTIPLE, width=50, height=10, 
+        self.excludeItemList = tk.Listbox(self.excludeListFrame, listvariable=self.playerExcludeItemList, selectmode=tk.MULTIPLE, width=50, height=30, 
                                           yscrollcommand=lambda *args: self.excludeScrollBar.set(*args))
         self.excludeScrollBar = tk.Scrollbar(self.excludeListFrame, orient=tk.VERTICAL, command=self.excludeItemList.yview)
         self.excludeItemList.grid(row=0, column=0, sticky="news")
@@ -425,35 +502,62 @@ class gamePrepFrame(ctk.CTkFrame):
         self.excludeListFrame.grid_rowconfigure(0, weight=1)
         self.excludeListFrame.grid_columnconfigure(0, weight=1)
         
+        # Include Items List Box
         self.includeListFrame = ttk.Frame(popup)
         self.playerIncludeItemList = tk.Variable(value=[])
-        self.includeItemList = tk.Listbox(self.includeListFrame, listvariable=self.playerIncludeItemList, selectmode=tk.MULTIPLE, width=50, height=10, 
+        self.includeItemList = tk.Listbox(self.includeListFrame, listvariable=self.playerIncludeItemList, selectmode=tk.MULTIPLE, width=50, height=30, 
                                           yscrollcommand=lambda *args: self.includeScrollBar.set(*args))
-        self.includeScrollBar = tk.Scrollbar(self.includeListFrame, orient=tk.VERTICAL, command=self.excludeItemList.yview)
+        self.includeScrollBar = tk.Scrollbar(self.includeListFrame, orient=tk.VERTICAL, command=self.includeItemList.yview)
         self.includeItemList.grid(row=0, column=0, sticky="news")
         self.includeScrollBar.grid(row=0, column=1, sticky="ns")
         self.includeListFrame.grid_rowconfigure(0, weight=1)
         self.includeListFrame.grid_columnconfigure(0, weight=1)
 
-        self.excludeListFrame.grid(row=1, column=0, sticky="news", padx=10, pady=10)
-        self.includeListFrame.grid(row=1, column=1, sticky="news", padx=10, pady=10)
+        # List Box Frames
+        self.excludeListFrame.grid(row=4, column=0, sticky="news", padx=10, pady=10)
+        self.includeListFrame.grid(row=4, column=1, sticky="news", padx=10, pady=10)
 
+        # Add Item to Include Items
         self.addItemsButton  = ctk.CTkButton(popup, text="Add", command=lambda: self.addSelected())
-        self.addItemsButton.grid(row=2, column=0, padx=5, pady=5)
-        self.removeItemsButton  = ctk.CTkButton(popup, text="Remove", command=lambda: self.removeSelected())
-        self.removeItemsButton.grid(row=2, column=1, padx=5, pady=5)
+        self.addItemsButton.grid(row=5, column=0, padx=5, pady=5, sticky="new")
 
-        ctk.CTkButton(popup, text="Close", command=lambda: self.updateIncludedItems(popup)).grid(row=3, column=0, pady=10)
+        # Remove Items from Include Items
+        self.removeItemsButton  = ctk.CTkButton(popup, text="Remove", command=lambda: self.removeSelected())
+        self.removeItemsButton.grid(row=5, column=1, padx=5, pady=5, sticky="new")
+
+        # Close modal window
+        ctk.CTkButton(popup, text="Close", command=lambda: self.updateIncludedItems(popup)).grid(row=6, column=0, pady=10, columnspan=2)
 
         self.updatePlayerVar()  # Trigger updatePlayerVar once on window load
 
     def updatePlayerVar(self, *args):
-        self.playerInd = self.playerSelectOptionsMenu._values.index(self.playerVar.get())
+        self.playerInd = self.playerSelectOptionsMenu.cget("values").index(self.playerVar.get())
         self.gameLabel.configure(text="Game: " + self.master.data.playerData[self.playerInd][1])
         self.initializeItemLists()
         self.excludeItemList.selection_clear(0, tk.END)
         self.includeItemList.selection_clear(0, tk.END)
-        self.update_idletasks
+        self.update_idletasks()
+
+    def filterExcludeList(self):
+        # Update the include and exclude lists
+        currentInclude = list(self.playerIncludeItemList.get())
+        currentExclude = list(self.master.data.allDatapackageData[self.playerInd]["item_name_to_id"].keys())
+
+        # Update current exclude list
+        currentExclude = [item for item in currentExclude if item not in currentInclude]
+
+        if self.excludeItemFilterVar.get():
+            filteredExclude = []
+            # Filtered list preserve original case
+            for item in currentExclude:
+                itemLow = item.lower()
+                if itemLow.find(self.excludeItemFilterVar.get().lower()) > -1:
+                    filteredExclude.append(item) 
+
+            self.updateLists(currentInclude,filteredExclude)
+        else:
+            # If filter is cleared set it back to full list
+            self.updateLists(currentInclude,currentExclude)
 
     def updateLists(self, currentInclude, currentExclude):
         # Update the Listbox variables
@@ -534,31 +638,46 @@ class hintFrame(ctk.CTkFrame):
     """
     def __init__(self, master):
         super().__init__(master)
+        self.columnconfigure((0,1,2), weight=1)
+        self.hintHistoryLblList = []
+        self.hintTextList = []
         
+        # Switch to set hints to target player
         self.playerScopeToggleVar = ctk.StringVar(value="off")
         self.playerScopeToggleSW = ctk.CTkSwitch(self, text="Hints for Specific Player", command=lambda: self.playerScopeToggle(), 
                                                variable=self.playerScopeToggleVar, onvalue="on", offvalue="off", state="disabled")
-        self.playerScopeToggleSW.grid(row=0, column=0, padx=5, pady=5)
+        self.playerScopeToggleSW.grid(row=0, column=0, padx=5, pady=5, sticky="e")
+
+        # Options Box for which player to target
         self.playerVar = ctk.StringVar(value="None")
         self.playerSelectOptionsMenu = ctk.CTkOptionMenu(self, variable=self.playerVar, values=[players[0] for players in self.master.data.playerData], 
                                                          state="disabled", command=self.setPlayerInd)
-        self.playerSelectOptionsMenu.grid(row=0, column=1, padx=5, pady=5)
-        self.playerInd = 0
+        self.playerSelectOptionsMenu.grid(row=0, column=1, padx=5, pady=5, sticky="ew")
                                                          
         # Get Next Region Hint Button
         self.getNextRegionHintBtn = ctk.CTkButton(self, text="Get Next Region Hint", command=lambda: self.updateNextRegionHint(), state="disabled")
         self.getNextRegionHintBtn.grid(row=1, column=0, padx=5, pady=5)
 
         # Get Random Hint Button
-        self.getRandomItemHintBtn = ctk.CTkButton(self, text="Get Random Item Hint", command=lambda: self.updateRandomItemHint(), state="disabled")
-        self.getRandomItemHintBtn.grid(row=1, column=1, padx=5, pady=5)
+        self.getrandomLocHintBtn = ctk.CTkButton(self, text="Get Random Location Hint", command=lambda: self.updaterandomLocHint(), state="disabled")
+        self.getrandomLocHintBtn.grid(row=1, column=1, padx=5, pady=5, sticky="w")
+
+        self.hintHistory = ctk.CTkScrollableFrame(self, label_text="Hints")
+        self.hintHistory.grid_columnconfigure(0, weight=1)
+        self.hintHistory.grid(row=4, column=0, columnspan=3, sticky="swe")
 
         # Hint Label
-        self.hintLabel = ctk.CTkLabel(self, text=self.master.data.hint)
-        self.hintLabel.grid(row=2, column=0, padx=5, pady=5, columnspan=2, rowspan=2)
+        self.hintErrorLabel = ctk.CTkLabel(self, text="")
+        self.hintErrorLabel.grid(row=5, column=0, columnspan=2, padx=5, pady=5)
+
+        # Close modal window
+        ctk.CTkButton(self, text="Close", command=lambda: self.master.destroy()).grid(row=5, column=2, pady=10, sticky="se")
+        
+        # This needs initialized for specific player hints when the user has not updated the defaults in the options box
+        self.playerInd = 0
 
     def setPlayerInd(self, *args):
-        self.playerInd = self.playerSelectOptionsMenu._values.index(self.playerVar.get())
+        self.playerInd = self.playerSelectOptionsMenu.cget("values").index(self.playerVar.get())
 
     def playerScopeToggle(self):
         if self.playerScopeToggleVar.get() == "on":
@@ -574,28 +693,42 @@ class hintFrame(ctk.CTkFrame):
         """
         try:
             self.master.data.getRegionBasedHint()
-            self.hintLabel.configure(text=self.master.data.hint)
-            self.hintLabel.configure(fg_color = "transparent")
+            self.hintErrorLabel.configure(fg_color = "transparent", text=self.master.data.hintError)
+            self.updateHistory()
         except Exception as e:
-            self.hintLabel.configure(text=e, fg_color = "dark red")
+            self.hintErrorLabel.configure(text=e, fg_color = "dark red")
     
-    def updateRandomItemHint(self):
+    def updaterandomLocHint(self):
         """
         Update the hint label with the next random item hint.
         """
         try:
-            self.master.data.getRandomItemHint()
-            self.hintLabel.configure(text=self.master.data.hint)
-            self.hintLabel.configure(fg_color = "transparent")
+            self.master.data.getrandomLocHint()
+            self.hintErrorLabel.configure(fg_color = "transparent", text=self.master.data.hintError)
+            self.updateHistory()
         except Exception as e:
-            self.hintLabel.configure(text=e, fg_color = "dark red")
+            self.hintErrorLabel.configure(text=e, fg_color = "dark red")
+    
+    def updateHistory(self):
+        # This avoids creating new label objects every time
+        for hintInd,hint in enumerate(self.master.data.chosenLocations["hintHistory"]):
+            if hintInd > (len(self.hintTextList) - 1):
+                hintHistoryLabel = ctk.CTkLabel(self.hintHistory, text=hint)
+                self.hintHistoryLblList.append(hintHistoryLabel)
+                self.hintTextList.append(hint)
+        for lblInd, label in enumerate(reversed(self.hintHistoryLblList)):
+            label.grid(row=(lblInd+1)*2, column=0, padx=5, pady=5, rowspan=2)
+        self.update_idletasks()
 
 class HintCompanion(ctk.CTk):
     def __init__(self):
         super().__init__()
 
         self.title("Hint Companion")
-        self.geometry("540x400")
+        self.geometry("540x700")
+        self.minsize(540,700)
+        self.maxsize(540,700)
+        self.resizable(width=False, height=False)
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure((0, 1), weight=1)
         self.data = hintCompanionData()
@@ -608,6 +741,36 @@ class HintCompanion(ctk.CTk):
 
         self.hintFrame = hintFrame(self)
         self.hintFrame.grid(row=2, column=0, padx=5, pady=5, sticky="news")
+
+    def toggleFrames(self, frame, state):
+        match frame:
+            case "hint":
+                self.hintFrame.playerScopeToggleSW.configure(state=state)
+                self.hintFrame.playerSelectOptionsMenu.configure(state=state)
+                self.hintFrame.getrandomLocHintBtn.configure(state=state)
+                self.hintFrame.getNextRegionHintBtn.configure(state=state)
+                if state == "disabled":
+                    self.hintFrame.playerSelectOptionsMenu.set("None")
+                    self.hintFrame.playerSelectOptionsMenu.configure(values=["None"])
+                else:
+                    self.hintFrame.playerSelectOptionsMenu.set(self.data.playerData[0][0])
+                    self.hintFrame.playerSelectOptionsMenu.configure(state="normal", values=[players[0] for players in self.data.playerData])
+                self.hintFrame.update_idletasks()
+            case "prep":
+                self.gamePrepFrame.setupItemHintsBtn.configure(state=state)
+                self.gamePrepFrame.update_idletasks()
+            case "connection":
+                self.connectionFrame.connectButton.configure(state=state)
+                self.connectionFrame.portEntry.configure(state=state)
+                self.connectionFrame.roomEntry.configure(state=state)
+                self.connectionFrame.trackerEntry.configure(state=state)
+                #The only time this button will be disabled is during connections
+                self.gamePrepFrame.spoilerSelectBtn.configure(state=state)
+                self.connectionFrame.update_idletasks()
+
+    def toggleAllFrames(self,state):
+        frames = ["hint", "prep", "connection"]
+        for frame in frames: self.toggleFrames(frame,state)
 
 if __name__ == "__main__":
 
