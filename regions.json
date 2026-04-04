@@ -286,6 +286,34 @@
             {"Gerudo Training Ground": ["Gerudo Training Ground"]},
             {"Ganon's Castle": ["Ganons Castle", "Ganons Tower"]}
         ]
+    },
+    "Final Fantasy X":{ 
+        "Region": [
+            {"Baaj Temple": ["BAAJ", "ALBS"]},
+            {"Besaid": ["BSIL", "Brotherhood", "SSLI"]},
+            {"Kilika": ["KILK", "SSWI"]},
+            {"Luca": ["LUCA"]},
+            {"Mi'ihen Highroad": ["MIHN"]},
+            {"Mushroom Rock Road": ["MUSH"]},
+            {"Djose": ["DJOS"]},
+            {"Moonflow": ["MOON"]},
+            {"Guadosalem": ["GAUD"]},
+            {"Thunder Plains": ["THPL"]},
+            {"Bevelle": ["BEVL", "MCWO: Campsite - (Chest)"]},
+            {"Macalania": ["MCWO", "MCLA"]},
+            {"Bikanel": ["BIKA", "HOME"]},
+            {"Airship": ["AIRS"]},
+            {"Calm Lands": ["CALM", "REMI"]},
+            {"Cavern of the Stolen Fayth": ["COSF"]},
+            {"Monster Arena": ["MOAR"]},
+            {"Mount Gagazet": ["MTGS", "MTGC"]},
+            {"Zanarkand": ["ZNKD"]},
+            {"Inside Sin": ["SINS"]},
+            {"Omega Ruins": ["OMGR"]},
+            {"Recruitment": ["Recruit"]},
+            {"Blitzball": ["Blitzball"]},
+            {"Fiend Capture": ["Fiend Capture"]}
+        ]
     }
 }
 
